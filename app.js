@@ -8,12 +8,13 @@ var tabjeu=[
     [0,0,0,0]
 ];
 //tableau image
-var tabresultat =[
-    [1,4,3,4],
-    [1,2,3,2],
-    [7,8,6,5],
-    [8,7,5,6]
-];
+// var tabresultat =[
+//     [1,4,3,4],
+//     [1,2,3,2],
+//     [7,8,6,5],
+//     [8,7,5,6]
+// ];
+var tabresultat = genereTableauAleatoire();
 var oldSelection=[];
 
 var nbAffiche = 0;
@@ -128,4 +129,43 @@ function verif(bouton){
             oldSelection=[ligne,colonne];
         }
     }
+}
+//genere tab aleatoire
+
+function genereTableauAleatoire(){
+
+    var tab = [];
+
+    var nbImagePosition = [0,0,0,0,0,0,0,0]
+    //pour générer 4 ligne boucle for
+
+    for(var i =0; i < 4 ; i++){
+
+        var ligne = [];
+        //génération de colone x4 car on en veux 4
+
+        for(var j = 0; j < 4; j++){
+
+            
+
+            var fin = false;
+
+            while(!fin){
+                var randomImage =Math.floor(Math.random() * 8);
+                //Mathfloor arondi et math randome pour un number randome
+                if(nbImagePosition[randomImage] < 2){
+
+                    ligne.push(randomImage + 1); 
+                    //envoi de valeur
+
+                    //incrémentation
+                    nbImagePosition[randomImage]++;
+
+                    fin = true ;
+                }   
+            }
+        }
+        tab.push(ligne);
+    }
+    return tab;
 }
