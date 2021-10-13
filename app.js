@@ -1,30 +1,131 @@
 const DivResultat= document.querySelector('#resultat')
 
-//!tableu multiligne !!
+//!tableu multiligne !! on click
 var tabjeu=[
-    [0,1,0,0],
-    [0,2,0,0],
+    [0,0,0,0],
+    [0,0,0,0],
     [0,0,0,0],
     [0,0,0,0]
 ];
+//tableau image
+var tabresultat =[
+    [1,4,3,4],
+    [1,2,3,2],
+    [7,8,6,5],
+    [8,7,5,6]
+];
+var oldSelection=[];
+
+var nbAffiche = 0;
+
+var ready = true;
 
 afficherTableau();
 
 function afficherTableau(){
     var txt ="";
+
     // ! pour acceder au différente ligne il nous faux 2 boucle for incrémentale
+
     for(var i=0; i < tabjeu.length; i++){
+
+        //incrementation de la ligne jusqua a fin
         txt +="<div>";
+
         for(var j=0; j<tabjeu[i].length; j++){
+
+            //incrémentation jusq'a la dernière ligne et la derniere valeur
+
             if(tabjeu[i][j] === 0){
-             txt +="<button class='btn btn-primary m-2' style='width:100px;height:100px;'>Afficher</buttob>";   
+                txt +="<button class='btn btn-primary m-2'onClick='verif(\""+i+"-"+j+"\");' >Afficher</button>";   
             }
             else{
-                txt+="<image scr='img/elephant.png'style='width:100px;height:100px;class='m-2>'"
+                txt += "<img src='"+getImage(tabjeu[i][j])+"' class='m-2' >";
             }
-            
         }
         txt +="</div>";
     }
     DivResultat.innerHTML=txt;
+}
+//fonction génération d'image
+function getImage(valeur){
+
+    //!atention ./image/ pour récupérer mon image car je suis dans un sous dosssier
+
+    var imgTxt= "./image/";
+    switch(valeur){
+
+        //!atention ne pas oubier de bien récuperer les image avec les bon chemin
+
+        case 1 : imgTxt += "elephant.png";
+        break;
+
+        case 2 :imgTxt += "giraffe.png";
+        break;
+
+        case 3 :imgTxt += "hippo.png";
+        break;
+
+        case 4 :imgTxt += "monkey.png";
+        break;
+
+        case 5 :imgTxt += "panda.png";
+        break;
+
+        case 6 :imgTxt += "parrot.png";
+        break;
+
+        case 7 :imgTxt += "penguin.png";
+        break;
+
+        case 8 :imgTxt += "pig.png";
+        break;
+
+        default: console.log("cas non pris en compte")
+    }
+    return imgTxt;
+    //ne pas oublier imgtxt apres sinon not found
+}
+//Pour récupérer les coordonner des bouton et affiher l'image correspondantte
+function verif(bouton){
+    if(ready){
+    //découpage de la variable bouton al'aide du substring 
+        nbAffiche++;
+
+        var ligne = bouton.substr(0,1);
+        //afin de réupérer lélément 1 et 2
+        var colonne = bouton.substr(2,1);
+        //récuparation de coordonner réussi on click
+
+        // console.log(ligne);
+        // console.log(colonne);
+
+        //mélange des 2 tableau le tableau de base avec les bouton et le tableau avec les image
+        tabjeu[ligne][colonne]= tabresultat[ligne][colonne];
+        afficherTableau();
+
+        if(nbAffiche>1){
+            ready=false;
+            //verification
+            setTimeout(() =>{
+                if(tabjeu[ligne][colonne] !== tabresultat[oldSelection[0]][oldSelection[1]]){
+                //0 pour récuperer la ligne et 1 pour la collone
+                //on vérifi si la valeur ou l'on va cliquer correspond a la valeur du précédant clique
+                tabjeu[ligne][colonne]=0;
+                tabjeu[oldSelection[0]][oldSelection[1]]=0;
+                //pas de virgule pour verifyer dans un tableau sai des crochet inverser
+                }
+                afficherTableau();
+                ready=true;
+                //reset du ready pour retourner les carte de nouveaux
+                nbAffiche=0;
+                //timer
+            },600)
+        }
+        else{
+            //ancienne slection
+            //on la placer la pour quil ne s'execute pas quand le timeout sécoule
+            oldSelection=[ligne,colonne];
+        }
+    }
 }
